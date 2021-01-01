@@ -1,0 +1,26 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy: # Describe how images are deployed
+  kubectl: # Uses a client side kubectyl apply to deploy manifests
+    manifests:
+      - ./infra/k8s/* # The Kubernetes yaml or json manifests
+build: # Describe how images are built
+  # local: 
+  #   push: false # Do not push images to Docker hub
+  googleCloudBuild: # To use Google Cloud Build
+    projectId: gitix-dev
+  artifacts: # The images to be built
+    - image: us.gcr.io/gitix-dev/auth # Image name to be built
+      context: auth # The directory containing the artifact's sources
+      docker: 
+        dockerfile: Dockerfile # The Docker file in the directory
+      sync: # Sync local files to pods instead of triggering an image build when modified
+        manual: # Manual sync rules
+          - src: 'src/**/*.ts' # Local paths to be matched against
+            dest: . # The destination path in the container where the files should be synced to
+
+
+
+
+            
+      
