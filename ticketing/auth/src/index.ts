@@ -10,7 +10,7 @@ import { signoutRouter } from './routes/signout'
 import { signupRouter } from './routes/signup'
 
 import { errorHandler } from './middlewares/error-handler'
-import { NotFoundError } from './errors/not-found-error'
+import { AuthServiceError } from './errors/auth-service-error'
 
 const PORT = 3000
 const app = express()
@@ -37,7 +37,7 @@ app.use(signupRouter)
 
 // Handle 404 errors
 app.all('*', () => {
-  throw new NotFoundError()
+  throw new AuthServiceError(404, 'Resource not found')
 })
 
 // Attach error handling middleware
@@ -58,7 +58,7 @@ const start = async () => {
     })
     console.log('Connected to MongoDB!')
   } catch (err) {
-    console.error(err)
+    throw new AuthServiceError(500, 'Error connecting to MongoDB')
   }
 
   // Listen to port
