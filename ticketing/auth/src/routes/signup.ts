@@ -1,32 +1,27 @@
 import express, { Request, Response } from 'express'
-import { body, validationResult } from 'express-validator'
+import { body } from 'express-validator'
 import jwt from 'jsonwebtoken'
 
-import { Password } from '../utils/password'
-import { RequestValidationError } from '../errors/request-validation-error'
-import { BadRequestError } from '../errors/bad-request-error'
-import { UserSaveError } from '../errors/user-save-error'
 import { User } from '../models/user'
+import { Password } from '../utils/password'
+import { validateRequest } from '../middlewares/validate-request'
+import { AuthServiceError } from '../errors/auth-service-error'
 
 const router = express.Router()
 
 router.post('/api/users/signup', 
   [
     body('email')
-      .isEmail()
-      .withMessage('Email is not valid.'),
+      .trim()
+      .notEmpty().withMessage('Email is required').bail()
+      .isEmail().withMessage('Email is not valid.'),
     body('password')
       .trim()
-      .isLength({ min: 4})
-      .withMessage('Password must have at least 4 characters.')
+      .notEmpty().withMessage('Password is required').bail()
+      .isLength({ min: 4 }).withMessage('Password must have at least 4 characters.')
   ],
+  validateRequest,
   async (req: Request, res: Response) => {
-    // Finds the validation errors in this request and wraps them in an object with handy functions
-    const errors = validationResult(req)
-
-    if (!errors.isEmpty()) {
-      throw new RequestValidationError(errors.array())
-    }
 
     const { email, password } = req.body
 
@@ -34,7 +29,7 @@ router.post('/api/users/signup',
     const existingUser = await User.findOne({ email })
 
     if (existingUser) {
-      throw new BadRequestError('Email already in use')
+      throw new AuthServiceError(400, 'Email already in use')
     }
 
     try {
@@ -65,7 +60,7 @@ router.post('/api/users/signup',
       // user document will be converted to JSON (through the toJSON method) and returned
       return res.status(201).send(user)
     } catch {
-      throw new UserSaveError('Sign up failed')
+      throw new AuthServiceError(500, 'Sign up failed')
     }
 })
 
