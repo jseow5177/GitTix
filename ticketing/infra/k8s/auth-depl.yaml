@@ -4,18 +4,24 @@ kind: Deployment
 metadata:
   name: auth-depl
 spec:
-  replicas: 1
+  replicas: 1 # Number of pods to create
   selector:
     matchLabels:
-      app: auth
+      app: auth # The pods label to be managed
   template:
     metadata:
       labels:
-        app: auth
+        app: auth # Label of pod
     spec:
-      containers:
+      containers: # Define the containers within the pod
         - name: auth
-          image: us.gcr.io/gitix-dev/auth
+          image: us.gcr.io/gitix-dev/auth # The image to create the container
+          env: # The environment variables to be accessed in the container
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret # The name of the secret object
+                  key: JWT_KEY # The key that we want to access inside the secret object
 ---
 # Auth ClusterIP service
 apiVersion: v1
