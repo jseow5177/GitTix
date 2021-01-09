@@ -1,13 +1,23 @@
 import { ValidationError } from 'express-validator'
-import { CustomError } from './custom-error'
+import { AuthServiceError } from './auth-service-error'
 
-export class RequestValidationError extends CustomError{
-  statusCode = 400
+/**
+ * Handle validation in signup and signin requests.
+ * 
+ * Extends the AuthServiceError and override the serializeErrors method.
+ */
 
-  constructor(public errors: ValidationError[]) {
-    super('Invalid request in auth service')
+export class RequestValidationError extends AuthServiceError{
+
+  constructor(
+    public statusCode: number, 
+    public message: string, 
+    public errors: ValidationError[]
+  ) {
+    super(statusCode, message)
   }
 
+  // Override serializeErrors of the generic auth service class
   serializeErrors() {
     return this.errors.map(err => ({
       message: err.msg,
