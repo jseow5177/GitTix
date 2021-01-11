@@ -14,11 +14,11 @@ router.post('/api/users/signup',
     body('email')
       .trim()
       .notEmpty().withMessage('Email is required').bail()
-      .isEmail().withMessage('Email is not valid.'),
+      .isEmail().withMessage('Email is not valid'),
     body('password')
       .trim()
       .notEmpty().withMessage('Password is required').bail()
-      .isLength({ min: 4 }).withMessage('Password must have at least 4 characters.')
+      .isLength({ min: 4 }).withMessage('Password must have at least 4 characters')
   ],
   validateRequest,
   async (req: Request, res: Response) => {
