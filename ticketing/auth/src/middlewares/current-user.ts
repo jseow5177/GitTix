@@ -14,6 +14,9 @@ declare global {
   }
 }
 
+/**
+ * currentUser middleware is placed before the requireAuth middleware
+ */
 export const currentUser = (
   req: Request, 
   res: Response, 
