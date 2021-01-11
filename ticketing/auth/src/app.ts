@@ -23,8 +23,10 @@ app.use(urlencoded({ extended: true })) // Parse url params with the qs library
 
 app.use(
   cookieSession({
-    signed: false, // cookie content will not be encrypted
-    secure: true // cookie is only to be sent over HTTPS
+    // cookie content will not be encrypted
+    signed: false,
+    // cookie is only to be sent over HTTPS when not in test environment
+    secure: process.env.NODE_ENV !== 'test'
   })
 )
 
