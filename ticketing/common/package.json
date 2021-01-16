@@ -1,6 +1,6 @@
 {
   "name": "@gittix-js/common",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A common library shared by services in GitTix",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
@@ -14,6 +14,10 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jseow5177/GitTix.git"
+  },
   "devDependencies": {
     "del-cli": "^3.0.1",
     "typescript": "^4.1.3"
