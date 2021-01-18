@@ -4,8 +4,7 @@ import jwt from 'jsonwebtoken'
 
 import { User } from '../models/user'
 import { Password } from '../utils/password'
-import { validateRequest } from '../middlewares/validate-request'
-import { AuthServiceError } from '../errors/auth-service-error'
+import { validateRequest, BadRequestError } from '@gittix-js/common'
 
 const router = express.Router()
 
@@ -29,39 +28,35 @@ router.post('/api/users/signup',
     const existingUser = await User.findOne({ email })
 
     if (existingUser) {
-      throw new AuthServiceError(400, 'Email already in use')
+      throw new BadRequestError('Email already in use')
     }
 
-    try {
-      // Hash password with scrypt
-      const hashedPassword = await Password.toHash(password)
+    // Hash password with scrypt
+    const hashedPassword = await Password.toHash(password)
 
-      const user = User.build({ email, password: hashedPassword })
-      
-      // Save user into DB
-      await user.save()
+    const user = User.build({ email, password: hashedPassword })
 
-      // Generate JWT (Synchronous)
-      const userJwt = jwt.sign({
-        id: user.id,
-        email: user.email
-      },
-        // Append a non-null assertion operator (!)
-        // Tells the TypeScript compiler that this expression can never be null or undefined
-        // as a check is already made at app startup
-        process.env.JWT_KEY!
-      )
+    // Save user into DB
+    await user.save()
 
-      // Store in session object
-      req.session = {
-        jwt: userJwt
-      }
+    // Generate JWT (Synchronous)
+    const userJwt = jwt.sign({
+      id: user.id,
+      email: user.email
+    },
+      // Append a non-null assertion operator (!)
+      // Tells the TypeScript compiler that this expression can never be null or undefined
+      // as a check is already made at app startup
+      process.env.JWT_KEY!
+    )
 
-      // user document will be converted to JSON (through the toJSON method) and returned
-      return res.status(201).send(user)
-    } catch {
-      throw new AuthServiceError(500, 'Sign up failed')
+    // Store in session object
+    req.session = {
+      jwt: userJwt
     }
-})
+
+    return res.status(201).send(user)
+  }
+)
 
 export { router as signupRouter }

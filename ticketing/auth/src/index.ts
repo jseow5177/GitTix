@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 import { app } from './app'
-import { AuthServiceError } from './errors/auth-service-error'
+import { DatabaseConnectionError } from '@gittix-js/common'
 
 const PORT = 3000
 
@@ -20,7 +20,7 @@ const start = async () => {
     })
     console.log('Connected to MongoDB!')
   } catch (err) {
-    throw new AuthServiceError(500, 'Error connecting to MongoDB')
+    throw new DatabaseConnectionError()
   }
 
   // Listen to port

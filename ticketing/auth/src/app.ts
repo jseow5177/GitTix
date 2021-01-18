@@ -8,8 +8,7 @@ import { signinRouter } from './routes/signin'
 import { signoutRouter } from './routes/signout'
 import { signupRouter } from './routes/signup'
 
-import { errorHandler } from './middlewares/error-handler'
-import { AuthServiceError } from './errors/auth-service-error'
+import { errorHandler, NotFoundError } from '@gittix-js/common'
 
 const app = express()
 
@@ -37,7 +36,7 @@ app.use(signupRouter)
 
 // Handle 404 errors
 app.all('*', () => {
-  throw new AuthServiceError(404, 'Resource not found')
+  throw new NotFoundError()
 })
 
 // Attach error handling middleware
