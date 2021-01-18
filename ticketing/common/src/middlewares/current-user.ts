@@ -32,7 +32,7 @@ export const currentUser = (
 
     req.currentUser = payload
     
-    return res.status(200).send({ currentUser: payload })
+    return next()
   } catch {
     // If token validation fails
     return next()
