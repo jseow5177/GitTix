@@ -11,14 +11,18 @@ const start = async () => {
     throw new Error('JWT secret key is not defined')
   }
 
+  if (!process.env.MONGO_URI) {
+    throw new Error('MONGO_URI is not defined')
+  }
+
   try {
     // Connect to MongoDB instance on service
-    await mongoose.connect('mongodb://auth-mongo-srv:27017/auth', {
+    await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true
     })
-    console.log('Connected to MongoDB!')
+    console.log(`Connected to MongoURI ${process.env.MONGO_URI}`)
   } catch (err) {
     throw new DatabaseConnectionError()
   }

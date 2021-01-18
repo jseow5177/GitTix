@@ -22,6 +22,8 @@ spec:
                 secretKeyRef:
                   name: jwt-secret # The name of the secret object
                   key: JWT_KEY # The key that we want to access inside the secret object
+            - name: MONGO_URI
+              value: mongodb://auth-mongo-srv:27017/auth
 ---
 # Auth ClusterIP service
 apiVersion: v1
