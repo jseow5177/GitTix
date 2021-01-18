@@ -1,0 +1,41 @@
+# Tickets deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tickets-depl
+spec:
+  replicas: 1 # Number of pods to create
+  selector:
+    matchLabels:
+      app: tickets # The pods label to be managed
+  template:
+    metadata:
+      labels:
+        app: tickets # Label of pod
+    spec:
+      containers: # Define the containers within the pod
+        - name: tickets
+          image: us.gcr.io/gitix-dev/tickets # The image to create the container
+          env: # The environment variables to be accessed in the container
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret # The name of the secret object
+                  key: JWT_KEY # The key that we want to access inside the secret object
+            - name: MONGO_URI
+              value: 'mongodb://tickets-mongo-srv:27017/tickets'
+---
+# Tickets ClusterIP service
+apiVersion: v1
+kind: Service
+metadata:
+  name: tickets-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: tickets
+  ports:
+    - name: tickets
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
