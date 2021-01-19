@@ -3,7 +3,11 @@ import express from 'express'
 import cookieSession from 'cookie-session'
 import { json, urlencoded } from 'body-parser'
 
-import { errorHandler, NotFoundError } from '@gittix-js/common'
+import { errorHandler, NotFoundError, currentUser } from '@gittix-js/common'
+import { createTicketRouter } from './routes/new-ticket'
+import { retrieveTicketRouter } from './routes/retrieve-ticket'
+import { getTicketsRouter } from './routes/get-tickets'
+import { updateTicketRouter } from './routes/update-ticket'
 
 const app = express()
 
@@ -23,6 +27,15 @@ app.use(
     secure: process.env.NODE_ENV !== 'test'
   })
 )
+
+// currentUser middleware
+// requireAuth middleware will be chained independently at routes that are private
+app.use(currentUser)
+
+app.use(createTicketRouter)
+app.use(retrieveTicketRouter)
+app.use(getTicketsRouter)
+app.use(updateTicketRouter)
 
 // Handle 404 errors
 app.all('*', () => {
