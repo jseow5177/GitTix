@@ -1,7 +1,7 @@
 import { MongoMemoryServer } from 'mongodb-memory-server'
-import request from 'supertest'
 import mongoose from 'mongoose'
-import { app } from '../app'
+import jwt from 'jsonwebtoken'
+import { ObjectId } from 'mongodb'
 
 /**
  * This setup file is executed after the testing framework is installed into the test environment.
@@ -13,7 +13,7 @@ let mongo: any
 declare global {
   namespace NodeJS {
     interface Global {
-      signup(): Promise<string[]>;
+      signup(): string[];
     }
   }
 }
@@ -60,16 +60,27 @@ afterAll(async () => {
 
 /**
  * Helper sign in function so that we can easily test private routes
+ * Creates a mock cookie and returns it
  */
-global.signup = async () => {
-  const email = 'test@test.com'
-  const password = 'qwertyui'
+global.signup = () => {
+  // Build a JWT paylod: {id, email}
+  const payload = {
+    id: new ObjectId(),
+    email: 'test@test.com'
+  }
 
-  const res = await request(app).post('/api/users/signup').send({
-    email, password
-  })
+  // Create a JWT
+  const token = jwt.sign(payload, process.env.JWT_KEY!)
 
-  const cookie = res.get('Set-Cookie')
+  // Build session Object: { jwt: JWT }
+  const session = { jwt: token }
 
-  return cookie
+  // Stringify the Object as JSON
+  const sessionJSON = JSON.stringify(session)
+
+  // Take JSON and encode as base64
+  const base64 = Buffer.from(sessionJSON).toString('base64')
+
+  //Return the base64 string in array form (required by supertest)
+  return [`express:sess=${base64}`]
 }
