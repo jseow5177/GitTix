@@ -1,4 +1,5 @@
 import nats from 'node-nats-streaming'
+import { TicketCreatedPublisher } from './events/ticket-created/ticket-created-publisher'
 
 console.clear()
 
@@ -10,17 +11,11 @@ stan.on('connect', () => {
   console.log('Publisher connected to NATS')
 
   // Message
-  const data = JSON.stringify({
-    id: '123',
-    title: 'concert',
-    price: 20
-  })
+  const data = { id: '123', title: 'concert', price: 20 }
 
-  setInterval(() => {
-    stan.publish('ticket:created', data, () => {
-      console.log('Event published')
-    })
-  }, 5000)
+  const publisher = new TicketCreatedPublisher(stan)
+
+  publisher.publish(data)
 })
 
 
