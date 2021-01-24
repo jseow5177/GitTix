@@ -7,7 +7,7 @@ const stan = nats.connect('gitix-dev', 'publisher_id', {
   url: 'http://localhost:4222' // connection url
 })
 
-stan.on('connect', () => {
+stan.on('connect', async () => {
   console.log('Publisher connected to NATS')
 
   // Message
@@ -15,7 +15,11 @@ stan.on('connect', () => {
 
   const publisher = new TicketCreatedPublisher(stan)
 
-  publisher.publish(data)
+  try {
+    await publisher.publish(data)
+  } catch (err) {
+    console.log(err)
+  }
 })
 
 
