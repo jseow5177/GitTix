@@ -1,8 +1,13 @@
 import request from 'supertest'
 import { app } from '../../app'
 import { Ticket } from '../../models/ticket'
+import { natsWrapper } from '../../nats-wrapper' // The mock implementation
 
 describe('test create new ticket route', () => {
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
 
   it('has a route handler listening to /api/tickets for post request', async () => {
     const response = await request(app)
@@ -34,7 +39,7 @@ describe('test create new ticket route', () => {
       .expect(400)
   })
 
-  it('creates a ticket with valid inputs', async () => {
+  it('creates a ticket with valid inputs and publishes event', async () => {
     const oldTickets = await Ticket.find({})
     expect(oldTickets.length).toEqual(0)
 
@@ -51,6 +56,8 @@ describe('test create new ticket route', () => {
     expect(newTickets.length).toEqual(1)
     expect(newTickets[0].title).toEqual(ticketTitle)
     expect(newTickets[0].price).toEqual(ticketPrice)
+
+    expect(natsWrapper.client.publish).toHaveBeenCalledTimes(1)
   })
   
 })
