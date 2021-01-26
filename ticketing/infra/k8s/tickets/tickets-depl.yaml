@@ -24,6 +24,14 @@ spec:
                   key: JWT_KEY # The key that we want to access inside the secret object
             - name: MONGO_URI
               value: 'mongodb://tickets-mongo-srv:27017/tickets'
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name # Use pod name as the NATS client id
+            - name: NATS_CLUSTER_ID
+              value: gitix-dev
 ---
 # Tickets ClusterIP service
 apiVersion: v1
@@ -37,5 +45,5 @@ spec:
   ports:
     - name: tickets
       protocol: TCP
-      port: 3000
-      targetPort: 3000
+      port: 3000 # Port of the service
+      targetPort: 3000 # Port of application running inside pods
