@@ -7,6 +7,9 @@ import {
   NotAuthorizedError
 } from '@gittix-js/common'
 import { Ticket } from '../models/ticket'
+import { TicketUpdatedPublisher } from '../events/publishers/ticket-update-publisher'
+import { natsWrapper } from '../nats-wrapper'
+
 
 const router = express.Router()
 
@@ -37,6 +40,14 @@ router.put('/api/tickets/:id',
     ticket.set({ title, price })
 
     await ticket.save()
+
+    const publisher = new TicketUpdatedPublisher(natsWrapper.client)
+    await publisher.publish({
+      id: ticket.id,
+      title: ticket.title,
+      price: ticket.price,
+      userId: ticket.userId
+    })
 
     return res.status(200).send(ticket)
   }
