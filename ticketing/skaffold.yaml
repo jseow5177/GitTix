@@ -1,7 +1,7 @@
 apiVersion: skaffold/v2alpha3
 kind: Config
 deploy: # Describe how images are deployed
-  kubectl: # Uses a client side kubectyl apply to deploy manifests
+  kubectl: # Uses a client side kubectl apply to deploy manifests
     manifests:
       - ./infra/k8s/* # The Kubernetes yaml or json manifests
 build: # Describe how images are built
@@ -21,6 +21,14 @@ build: # Describe how images are built
     - image: us.gcr.io/gitix-dev/tickets
       context: tickets
       docker: 
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: us.gcr.io/gitix-dev/orders
+      context: orders
+      docker:
         dockerfile: Dockerfile
       sync:
         manual:
