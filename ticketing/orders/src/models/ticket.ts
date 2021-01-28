@@ -1,4 +1,6 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
+import { Order } from '../models/order'
+import { OrderStatus } from '@gittix-js/common'
 
 interface TicketAttrs {
   title: string;
@@ -8,6 +10,7 @@ interface TicketAttrs {
 export interface TicketDoc extends mongoose.Document {
   title: string;
   price: number;
+  isReserved(): Promise<boolean>;
 }
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
@@ -48,6 +51,25 @@ const ticketSchema = new mongoose.Schema({
 
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
   return new Ticket(attrs)
+}
+
+ticketSchema.methods.isReserved = async function() {
+  /**
+   * A ticket is reserved if
+   * 1. An order with the ticket exists and
+   * 2. The order status is not cancelled.
+   */
+  const existingOrder = await Order.findOne({
+    ticket: this,
+    status: {
+      $in: [
+        OrderStatus.Created,
+        OrderStatus.AwaitingPayment,
+        OrderStatus.Complete
+      ]
+    }
+  })
+  return !!existingOrder
 }
 
 const Ticket = mongoose.model<TicketDoc, TicketModel>('Ticket', ticketSchema)
