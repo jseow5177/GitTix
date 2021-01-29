@@ -1,6 +1,6 @@
 {
   "name": "@gittix-js/common",
-  "version": "1.3.8",
+  "version": "1.3.9",
   "description": "A common library shared by services in GitTix",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
