@@ -2,7 +2,6 @@ import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
 import jwt from 'jsonwebtoken'
 import { ObjectId } from 'mongodb'
-import { natsWrapper } from '../__mocks__/nats-wrapper'
 
 /**
  * This setup file is executed after the testing framework is installed into the test environment.
