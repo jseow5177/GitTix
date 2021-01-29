@@ -1,7 +1,7 @@
 import { Subjects } from '../base/subjects'
 
 export interface OrderCancelledEvenet {
-  subjects: Subjects.OrderCancelled;
+  subject: Subjects.OrderCancelled;
   data: {
     id: string; // Order id
     ticket: {
