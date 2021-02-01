@@ -1,8 +1,10 @@
 import express, { Request, Response } from 'express'
+import mongoose from 'mongoose'
 import { body } from 'express-validator'
-import { ObjectId } from 'mongodb'
 import { Order } from '../models/order'
 import { Ticket } from '../models/ticket'
+import { OrderCreatedPublisher } from '../events/publishers/order-created-publisher'
+import { natsWrapper } from '../nats-wrapper'
 import {
   NotFoundError,
   requireAuth,
@@ -22,7 +24,7 @@ router.post('/api/orders',
     .trim()
     .notEmpty().withMessage('TicketId must be provided').bail()
     // Check and see if is valid mongodb id
-    .custom((input: string) => ObjectId.isValid(input)).withMessage('TicketId is not valid')
+    .custom((input: string) => mongoose.Types.ObjectId.isValid(input)).withMessage('TicketId is not valid')
   ],
   validateRequest,
   async (req: Request, res: Response) => {
@@ -53,6 +55,17 @@ router.post('/api/orders',
     await order.save()
 
     // 5. Publish an event that an order was created
+    const publisher = new OrderCreatedPublisher(natsWrapper.client)
+    publisher.publish({
+      id: order.id,
+      status: order.status,
+      userId: order.userId,
+      expiresAt: order.expiresAt.toISOString(), // Use UTC timestamp
+      ticket: {
+        id: ticket.id,
+        price: ticket.price
+      }
+    })
 
     return res.status(201).send(order)
 })
