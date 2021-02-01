@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current'
 
 /**
  * An interface that describes the properties
@@ -26,6 +27,7 @@ interface TicketDoc extends mongoose.Document {
   title: string;
   price: number;
   userId: string;
+  version: number;
 }
 
 /**
@@ -68,9 +70,11 @@ const ticketSchema = new mongoose.Schema({
       ret.id = ret._id // Remap _id field to id
       delete ret._id // Remove _id field
     }
-  },
-  versionKey: false // Remove version key (__v)
+  }
 })
+
+ticketSchema.set('versionKey', 'version') // Rename version key from __v to version
+ticketSchema.plugin(updateIfCurrentPlugin)
 
 // static property to build ticket
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
