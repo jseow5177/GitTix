@@ -1,5 +1,5 @@
 import request from 'supertest'
-import { ObjectID } from 'mongodb'
+import mongoose from 'mongoose'
 
 import { app } from '../../app'
 import { Ticket } from '../../models/ticket'
@@ -7,7 +7,7 @@ import { Ticket } from '../../models/ticket'
 describe('test retrieve a ticket route', () => {
 
   it('returns a 404 if ticket is not found', async () => {
-    const fakeId = new ObjectID()
+    const fakeId = mongoose.Types.ObjectId()
     await request(app)
       .get(`/api/tickets/${fakeId}`)
       .send()

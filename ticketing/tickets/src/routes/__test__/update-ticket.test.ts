@@ -1,6 +1,6 @@
 import request from 'supertest'
+import mongoose from 'mongoose'
 import { app } from '../../app'
-import { ObjectID } from 'mongodb'
 import { Ticket } from '../../models/ticket'
 import { natsWrapper } from '../../nats-wrapper'
 
@@ -34,7 +34,7 @@ describe('test update a ticket route', () => {
   })
 
   it('returns a 404 if the ticket id does not exist', async () => {
-    const id = new ObjectID()
+    const id = mongoose.Types.ObjectId()
     await request(app)
       .put(`/api/tickets/${id}`)
       .set('Cookie', global.signup())
@@ -46,7 +46,7 @@ describe('test update a ticket route', () => {
   })
 
   it('returns a 401 if the user is not authenticated', async () => {
-    const id = new ObjectID()
+    const id = mongoose.Types.ObjectId()
     await request(app)
       .put(`/api/tickets/${id}`)
       .send({
