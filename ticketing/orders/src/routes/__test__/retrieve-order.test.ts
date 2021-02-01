@@ -1,4 +1,5 @@
 import request from 'supertest'
+import mongoose from 'mongoose'
 import { app } from '../../app'
 import { Ticket } from '../../models/ticket'
 
@@ -7,6 +8,7 @@ describe('test retrieve order route', () => {
   it('fetches the order correctly for a user', async () => {
     // Create a ticket
     const ticket = Ticket.build({
+      id: mongoose.Types.ObjectId().toHexString(),
       title: 'A title',
       price: 20
     })
@@ -34,6 +36,7 @@ describe('test retrieve order route', () => {
   it('returns 401 if attempts to retrieve other user order', async () => {
     // Create a ticket
     const ticket = Ticket.build({
+      id: mongoose.Types.ObjectId().toHexString(),
       title: 'A title',
       price: 20
     })

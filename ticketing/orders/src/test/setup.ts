@@ -1,7 +1,6 @@
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
 import jwt from 'jsonwebtoken'
-import { ObjectId } from 'mongodb'
 
 /**
  * This setup file is executed after the testing framework is installed into the test environment.
@@ -68,7 +67,7 @@ afterAll(async () => {
 global.signup = () => {
   // Build a JWT paylod: {id, email}
   const payload = {
-    id: new ObjectId(),
+    id: mongoose.Types.ObjectId(),
     email: 'test@test.com'
   }
 
