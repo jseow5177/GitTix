@@ -3,6 +3,7 @@ import { Order } from '../models/order'
 import { OrderStatus } from '@gittix-js/common'
 
 interface TicketAttrs {
+  id: string;
   title: string;
   price: number;
 }
@@ -50,7 +51,13 @@ const ticketSchema = new mongoose.Schema({
 })
 
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
-  return new Ticket(attrs)
+  return new Ticket({
+    // ID adjustment
+    // Ensures that the ticket id in orders service is the same as ticket id in tickets service
+    _id: attrs.id,
+    title: attrs.title,
+    price: attrs.price
+  })
 }
 
 ticketSchema.methods.isReserved = async function() {
@@ -60,7 +67,7 @@ ticketSchema.methods.isReserved = async function() {
    * 2. The order status is not cancelled.
    */
   const existingOrder = await Order.findOne({
-    ticket: this,
+    ticket: this.id,
     status: {
       $in: [
         OrderStatus.Created,
