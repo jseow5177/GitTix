@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current'
 import { Order } from '../models/order'
 import { OrderStatus } from '@gittix-js/common'
 
@@ -8,14 +9,21 @@ interface TicketAttrs {
   price: number;
 }
 
+interface EventAttrs {
+  id: string;
+  version: number;
+}
+
 export interface TicketDoc extends mongoose.Document {
   title: string;
   price: number;
+  version: number;
   isReserved(): Promise<boolean>;
 }
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
   build(attrs: TicketAttrs): TicketDoc;
+  findByEvent(event: EventAttrs): Promise<TicketDoc | null>;
 }
 
 const ticketSchema = new mongoose.Schema({
@@ -46,9 +54,11 @@ const ticketSchema = new mongoose.Schema({
       ret.id = ret._id // Remap _id field to id
       delete ret._id // Remove _id field
     }
-  },
-  versionKey: false // Remove version key (__v)
+  }
 })
+
+ticketSchema.set('versionKey', 'version')
+ticketSchema.plugin(updateIfCurrentPlugin)
 
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
   return new Ticket({
@@ -58,6 +68,10 @@ ticketSchema.statics.build = (attrs: TicketAttrs) => {
     title: attrs.title,
     price: attrs.price
   })
+}
+
+ticketSchema.statics.findByEvent = (event: EventAttrs) => {
+  return Ticket.findOne({ _id: event.id, version: event.version - 1 })
 }
 
 ticketSchema.methods.isReserved = async function() {
