@@ -8,15 +8,6 @@ import { natsWrapper } from '../../nats-wrapper' // Mocked nats wraper
 
 describe('test create new order route', () => {
 
-  beforeEach(() => {
-    jest.clearAllMocks()
-  })
-
-  afterEach(async () => {
-    await Ticket.deleteMany({})
-    await Order.deleteMany({})
-  })
-
   it('returns an error if the ticket does not exist', async () => {
     const ticketId = mongoose.Types.ObjectId()
     await request(app)

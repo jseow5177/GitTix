@@ -26,11 +26,7 @@ describe('test update a ticket route', () => {
 
     ticketId = response.body.id
 
-    jest.clearAllMocks() // Ticket creation also publishes event. Need to clear mock
-  })
-
-  afterEach(async () => {
-    await Ticket.deleteMany({})
+    jest.clearAllMocks()
   })
 
   it('returns a 404 if the ticket id does not exist', async () => {

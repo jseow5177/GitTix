@@ -5,10 +5,6 @@ import { natsWrapper } from '../../nats-wrapper' // The mock implementation
 
 describe('test create new ticket route', () => {
 
-  beforeEach(() => {
-    jest.clearAllMocks()
-  })
-
   it('has a route handler listening to /api/tickets for post request', async () => {
     const response = await request(app)
       .post('/api/tickets')
