@@ -14,7 +14,7 @@ export abstract class Listener<T extends Event> {
   // Function to run when message is received
   abstract onMessage(data: T['data'], msg: Message): void
   // Pre-initialized NATS client
-  private client: Stan
+  protected client: Stan
   // Number of seconds this listener has to ack a message
   protected ackWait = 5 * 1000
 
