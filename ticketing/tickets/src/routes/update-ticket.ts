@@ -4,7 +4,8 @@ import {
   validateRequest,
   NotFoundError,
   requireAuth,
-  NotAuthorizedError
+  NotAuthorizedError,
+  BadRequestError
 } from '@gittix-js/common'
 import { Ticket } from '../models/ticket'
 import { TicketUpdatedPublisher } from '../events/publishers/ticket-update-publisher'
@@ -35,6 +36,10 @@ router.put('/api/tickets/:id',
 
     if (ticket.userId !== req.currentUser!.id) {
       throw new NotAuthorizedError()
+    }
+
+    if (ticket.orderId) {
+      throw new BadRequestError('Cannot edit a reserved ticket')
     }
 
     ticket.set({ title, price })
