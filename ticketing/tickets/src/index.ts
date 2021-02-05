@@ -1,8 +1,9 @@
 import mongoose from 'mongoose'
-
 import { app } from './app'
 import { natsWrapper } from './nats-wrapper'
 import { DatabaseConnectionError } from '@gittix-js/common'
+import { OrderCreatedListener } from './events/listeners/order-created-listener'
+import { OrderCancelledListener } from './events/listeners/order-cancelled-listener'
 
 const PORT = 3000
 
@@ -40,6 +41,11 @@ const start = async () => {
     })
     process.on('SIGINT', () => natsWrapper.client.close())
     process.on('SIGTERM', () => natsWrapper.client.close())
+
+    // Listen for order creation
+    new OrderCreatedListener(natsWrapper.client).listen()
+    // Listen for order cancellation
+    new OrderCancelledListener(natsWrapper.client).listen()
 
     // Connect to MongoDB instance on service
     await mongoose.connect(process.env.MONGO_URI, {
