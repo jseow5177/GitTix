@@ -94,6 +94,21 @@ describe('test update a ticket route', () => {
       .expect(400)
   })
 
+  it('returns a 400 if ticket is reserved', async () => {
+    const ticket = await Ticket.findById(ticketId)
+    ticket.set({ orderId: '123' }) // Add a defined order id
+    await ticket.save()
+
+    await request(app)
+      .put(`/api/tickets/${ticketId}`)
+      .set('Cookie', cookie)
+      .send({
+        title: 'A Title',
+        price: 200
+      })
+      .expect(400)
+  })
+
   it('updates ticket and publishes event when input is valid, returns a 200', async () => {
     const newTitle = 'New Title'
     const newPrice = 100
