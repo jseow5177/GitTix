@@ -34,6 +34,14 @@ build: # Describe how images are built
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: us.gcr.io/gitix-dev/expiration
+      context: expiration
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
     - image: us.gcr.io/gitix-dev/client
       context: client
       docker:
