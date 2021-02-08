@@ -65,6 +65,7 @@ describe('test order created listener', () => {
   it('publishes a ticket updated event', async () => {
     await listener.onMessage(data, msg)
 
+    // Get the first argument of the first call to natsWrapper.client.publish
     const ticketUpdatedData = JSON.parse((natsWrapper.client.publish as jest.Mock).mock.calls[0][1])
 
     expect(natsWrapper.client.publish).toHaveBeenCalledTimes(1)

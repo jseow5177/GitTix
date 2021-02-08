@@ -22,7 +22,7 @@ export class OrderCancelledListener extends Listener <OrderCancelledEvent> {
     // Save the ticket
     await ticket.save()
 
-    // Emit ticket updated event
+    // Emit ticket updated event so that orders service can increment the ticket version
     await new TicketUpdatedPublisher(this.client).publish({
       id: ticket.id,
       version: ticket.version,
