@@ -49,9 +49,9 @@ describe('test ticket updated listener', () => {
 
     const updatedTicket = await Ticket.findById(data.id)
 
-    expect(updatedTicket.title).toEqual(newTitle)
-    expect(updatedTicket.price).toEqual(newPrice)
-    expect(updatedTicket.version).toEqual(ticket.version + 1)
+    expect(updatedTicket!.title).toEqual(newTitle)
+    expect(updatedTicket!.price).toEqual(newPrice)
+    expect(updatedTicket!.version).toEqual(ticket.version + 1)
 
     expect(msg.ack).toHaveBeenCalledTimes(1)
   })
@@ -62,9 +62,9 @@ describe('test ticket updated listener', () => {
     expect(async () => await listener.onMessage(data, msg)).rejects.toThrow()
 
     const notUpdatedTicket = await Ticket.findById(data.id)
-    expect(notUpdatedTicket.title).toEqual(oldTitle)
-    expect(notUpdatedTicket.price).toEqual(oldPrice)
-    expect(notUpdatedTicket.version).toEqual(ticket.version)
+    expect(notUpdatedTicket!.title).toEqual(oldTitle)
+    expect(notUpdatedTicket!.price).toEqual(oldPrice)
+    expect(notUpdatedTicket!.version).toEqual(ticket.version)
 
     expect(msg.ack).toHaveBeenCalledTimes(0)
   })

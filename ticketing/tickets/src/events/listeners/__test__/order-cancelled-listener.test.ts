@@ -42,12 +42,12 @@ describe('test order created listener', () => {
 
   it('sets order id of ticket doc as undefined and acks message', async () => {
     const ticket = await Ticket.findById(data.ticket.id)
-    expect(ticket.orderId).toEqual(data.id)
+    expect(ticket!.orderId).toEqual(data.id)
 
     await listener.onMessage(data, msg) // Order is cancelled and event is received
 
     const updatedTicket = await Ticket.findById(data.ticket.id)
-    expect(updatedTicket.orderId).toBeUndefined()
+    expect(updatedTicket!.orderId).toBeUndefined()
     
     expect(msg.ack).toHaveBeenCalledTimes(1)
   })

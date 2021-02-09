@@ -45,12 +45,12 @@ describe('test order created listener', () => {
 
   it('saves order id into ticket doc and acks message', async () => {
     const ticket = await Ticket.findById(data.ticket.id)
-    expect(ticket.orderId).toBeUndefined() // No orderId on ticket creation
+    expect(ticket!.orderId).toBeUndefined() // No orderId on ticket creation
 
     await listener.onMessage(data, msg) // Order is created and event is received
 
     const updatedTicket = await Ticket.findById(data.ticket.id)
-    expect(updatedTicket.orderId).toBe(data.id)
+    expect(updatedTicket!.orderId).toBe(data.id)
     
     expect(msg.ack).toHaveBeenCalledTimes(1)
   })

@@ -50,12 +50,12 @@ describe('Test expiration complete listener', () => {
 
     const expiredOrder = await Order.findById(data.orderId)
 
-    expect(expiredOrder.status).toEqual(OrderStatus.Cancelled)
+    expect(expiredOrder!.status).toEqual(OrderStatus.Cancelled)
 
     expect(natsWrapper.client.publish).toHaveBeenCalledTimes(1)
     // Get the first argument of the first call to natsWrapper.client.publish
     const expirationEventData = JSON.parse((natsWrapper.client.publish as jest.Mock).mock.calls[0][1])
-    expect(expirationEventData.orderId).toEqual(expiredOrder.id)
+    expect(expirationEventData.orderId).toEqual(expiredOrder!.id)
 
     expect(msg.ack).toHaveBeenCalledTimes(1)
   })
@@ -69,7 +69,7 @@ describe('Test expiration complete listener', () => {
 
     const expiredOrder = await Order.findById(existingOrderId)
 
-    expect(expiredOrder.status).toEqual(order.status)
+    expect(expiredOrder!.status).toEqual(order!.status)
     expect(natsWrapper.client.publish).toHaveBeenCalledTimes(0)
     expect(msg.ack).toHaveBeenCalledTimes(0)
   })
