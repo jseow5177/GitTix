@@ -42,6 +42,14 @@ build: # Describe how images are built
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: us.gcr.io/gitix-dev/payments
+      context: payments
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
     - image: us.gcr.io/gitix-dev/client
       context: client
       docker:
