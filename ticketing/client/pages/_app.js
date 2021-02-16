@@ -7,7 +7,9 @@ function AppComponent({ Component, pageProps, currentUser }) {
   return (
     <>
       <Header currentUser={currentUser} />
-      <Component {...pageProps} />
+      <div className="container">
+        <Component {...pageProps} currentUser={currentUser} />
+      </div>
     </>
   )
 }
@@ -21,7 +23,12 @@ AppComponent.getInitialProps = async ({ Component, ctx }) => {
   let pageProps = {}
   if (Component.getInitialProps) {
     // Manually invoke getInitialProps of children pages
-    pageProps = await Component.getInitialProps(ctx) // Data passed into child components
+    // Data passed into child components
+    pageProps = await Component.getInitialProps(
+      ctx,
+      client, // Client object. Don't have to manually import and invoke this object again in child component
+      data.currentUser
+    )
   }
 
   return {
