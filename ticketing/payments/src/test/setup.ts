@@ -1,3 +1,6 @@
+import dotenv from 'dotenv'
+dotenv.config()
+
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
 import jwt from 'jsonwebtoken'
@@ -12,7 +15,7 @@ let mongo: any
 declare global {
   namespace NodeJS {
     interface Global {
-      signup(): string[];
+      signup(id?: string): string[];
     }
   }
 }
@@ -20,15 +23,15 @@ declare global {
 // Mock nats-wrapper
 jest.mock('../nats-wrapper')
 
+// Mock stripe client
+jest.mock('../stripe')
+
 /**
  * 1. Start an instance of MongoMemoryServer
  * 2. Get the Uri of the Mongo database
  * 3. Connect mongoose to it
  */
 beforeAll(async () => {
-  // Set environment variables
-  process.env.JWT_KEY = 'qwertyui'
-
   mongo = new MongoMemoryServer()
   const mongoUri = await mongo.getUri()
 
@@ -67,10 +70,10 @@ afterAll(async () => {
  * Helper sign in function so that we can easily test private routes
  * Creates a mock cookie and returns it
  */
-global.signup = () => {
+global.signup = (id?: string) => {
   // Build a JWT paylod: {id, email}
   const payload = {
-    id: mongoose.Types.ObjectId(),
+    id: id || mongoose.Types.ObjectId().toHexString(),
     email: 'test@test.com'
   }
 
