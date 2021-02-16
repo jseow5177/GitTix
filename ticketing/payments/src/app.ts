@@ -4,6 +4,7 @@ import cookieSession from 'cookie-session'
 import { json, urlencoded } from 'body-parser'
 
 import { errorHandler, NotFoundError, currentUser } from '@gittix-js/common'
+import { createPaymentRouter } from './routes/new-payment'
 
 const app = express()
 
@@ -27,6 +28,8 @@ app.use(
 // currentUser middleware
 // requireAuth middleware will be chained independently at routes that are private
 app.use(currentUser)
+
+app.use(createPaymentRouter)
 
 // Handle 404 errors
 app.all('*', () => {
