@@ -6,6 +6,7 @@ import { DatabaseConnectionError } from '@gittix-js/common'
 import { TicketCreatedListener } from './events/listeners/ticket-created-listener'
 import { TicketUpdatedListener } from './events/listeners/ticket-updated-listener'
 import { ExpirationCompleteListener } from './events/listeners/expiration-complete-listener'
+import { PaymentCreatedListener } from './events/listeners/payment-created-listener'
 
 const PORT = 3000
 
@@ -50,6 +51,8 @@ const start = async () => {
     new TicketUpdatedListener(natsWrapper.client).listen()
     // Listen for expiration complete
     new ExpirationCompleteListener(natsWrapper.client).listen()
+    // Listen for payment created
+    new PaymentCreatedListener(natsWrapper.client).listen()
 
     // Connect to MongoDB instance on service
     await mongoose.connect(process.env.MONGO_URI, {
