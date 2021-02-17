@@ -2,7 +2,9 @@ name: tests-orders
 
 # Run this workflow on every pull request
 on:
-  pull_request
+  pull_request:
+    paths:
+      -'ticketing/orders/**'
 
 jobs:
   # Set up the job key
