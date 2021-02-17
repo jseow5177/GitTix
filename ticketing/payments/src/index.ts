@@ -8,7 +8,6 @@ import { OrderCancelledListener } from './events/listeners/order-cancelled-liste
 const PORT = 3000
 
 const start = async () => {
-  console.log('Starting app.....')
   /**
    * Ensure that the JWT_KEY is present in the environment variable before starting the application
   */
