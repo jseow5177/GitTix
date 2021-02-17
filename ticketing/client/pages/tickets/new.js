@@ -1,9 +1,18 @@
 import { useState } from 'react'
+import useRequest from '../../hooks/use-request'
+import Router from 'next/router'
 
 function NewTicket() {
 
   const [title, setTitle] = useState('')
   const [price, setPrice] = useState('')
+
+  const [doRequest, errors] = useRequest({
+    url: '/api/tickets',
+    method: 'post',
+    body: { title, price },
+    onSuccess: () => Router.push('/')
+  })
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value)
@@ -24,10 +33,15 @@ function NewTicket() {
     setPrice(value.toFixed(2))
   }
 
+  const createTicket = async (e) => {
+    e.preventDefault()
+    await doRequest()
+  }
+
   return (
     <div>
       <h1>Create a Ticket</h1>
-      <form className="card p-4 w-18">
+      <form onSubmit={createTicket} className="card p-4">
         <div className="form-group">
           <label>Title</label>
           <input
@@ -45,7 +59,12 @@ function NewTicket() {
             onBlur={sanitizePrice}
           />
         </div>
-        <button className="btn btn-primary">Submit</button>
+        {errors}
+        <button
+          className="btn btn-primary"
+        >
+          Submit
+        </button>
       </form>
     </div>
   )
