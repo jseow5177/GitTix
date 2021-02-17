@@ -4,7 +4,7 @@ name: tests-orders
 on:
   pull_request:
     paths:
-      -'ticketing/orders/**'
+      - ticketing/orders/**
 
 jobs:
   # Set up the job key
