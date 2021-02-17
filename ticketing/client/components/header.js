@@ -4,6 +4,8 @@ function Header({ currentUser }) {
   const links = [
     !currentUser && { label: 'Sign Up', href: '/auth/signup' },
     !currentUser && { label: 'Sign In', href: '/auth/signin' },
+    currentUser && { label: 'Sell ticket', href: '/tickets/new' },
+    currentUser && { label: 'My orders', href: '/orders' },
     currentUser && { label: 'Sign Out', href: '/auth/signout' }
   ]
     .filter(link => link) // Remove falses
