@@ -4,7 +4,7 @@ name: tests-payments
 on:
   pull_request:
     paths:
-      -'ticketing/payments/**'
+      -'payments/**'
 
 jobs:
   # Set up the job key
