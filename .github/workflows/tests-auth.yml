@@ -1,4 +1,4 @@
-name: tests
+name: tests-auth
 
 # Run this workflow on every pull request
 on:
