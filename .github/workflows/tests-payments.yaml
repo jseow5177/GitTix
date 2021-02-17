@@ -2,7 +2,9 @@ name: tests-payments
 
 # Run this workflow on every pull request
 on:
-  pull_request
+  pull_request:
+    paths:
+      -'ticketing/payments/**'
 
 jobs:
   # Set up the job key
