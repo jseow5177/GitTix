@@ -68,8 +68,8 @@ describe('test update a ticket route', () => {
 
     const ticket = await Ticket.findById(ticketId)
 
-    expect(ticket.title).toEqual(oldTitle)
-    expect(ticket.price).toEqual(oldPrice)
+    expect(ticket!.title).toEqual(oldTitle)
+    expect(ticket!.price).toEqual(oldPrice)
   })
 
   it('returns a 400 if the user provides an invalid title', async () => {    
@@ -96,8 +96,8 @@ describe('test update a ticket route', () => {
 
   it('returns a 400 if ticket is reserved', async () => {
     const ticket = await Ticket.findById(ticketId)
-    ticket.set({ orderId: '123' }) // Add a defined order id
-    await ticket.save()
+    ticket!.set({ orderId: '123' }) // Add a defined order id
+    await ticket!.save()
 
     await request(app)
       .put(`/api/tickets/${ticketId}`)
@@ -124,8 +124,8 @@ describe('test update a ticket route', () => {
     
     const ticket = await Ticket.findById(ticketId)
 
-    expect(ticket.title).toEqual(newTitle)
-    expect(ticket.price).toEqual(newPrice)
+    expect(ticket!.title).toEqual(newTitle)
+    expect(ticket!.price).toEqual(newPrice)
 
     expect(natsWrapper.client.publish).toHaveBeenCalledTimes(1)
   })

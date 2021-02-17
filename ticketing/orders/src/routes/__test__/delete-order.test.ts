@@ -37,7 +37,7 @@ describe('test delete order route', () => {
 
     const updatedOrder = await Order.findById(order.id)
     
-    expect(updatedOrder.status).toEqual(OrderStatus.Cancelled)
+    expect(updatedOrder!.status).toEqual(OrderStatus.Cancelled)
     expect(natsWrapper.client.publish).toHaveBeenCalledTimes(1)
     
   })

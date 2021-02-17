@@ -46,16 +46,17 @@ describe('Test expiration complete listener', () => {
   })
 
   test('sets order to cancelled, emit order cancelled event and ack message', async () => {
-    //await listener.onMessage(data, msg)
+    await listener.onMessage(data, msg)
 
     const expiredOrder = await Order.findById(data.orderId)
 
     expect(expiredOrder!.status).toEqual(OrderStatus.Cancelled)
 
     expect(natsWrapper.client.publish).toHaveBeenCalledTimes(1)
+
     // Get the first argument of the first call to natsWrapper.client.publish
     const expirationEventData = JSON.parse((natsWrapper.client.publish as jest.Mock).mock.calls[0][1])
-    expect(expirationEventData.orderId).toEqual(expiredOrder!.id)
+    expect(expirationEventData.id).toEqual(expiredOrder!.id)
 
     expect(msg.ack).toHaveBeenCalledTimes(1)
   })
