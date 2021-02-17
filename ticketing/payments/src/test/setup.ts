@@ -1,6 +1,3 @@
-import dotenv from 'dotenv'
-dotenv.config()
-
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
 import jwt from 'jsonwebtoken'
@@ -32,6 +29,9 @@ jest.mock('../stripe')
  * 3. Connect mongoose to it
  */
 beforeAll(async () => {
+  // Set environment variables
+  process.env.JWT_KEY = 'qwertyui'
+
   mongo = new MongoMemoryServer()
   const mongoUri = await mongo.getUri()
 
