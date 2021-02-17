@@ -6,6 +6,8 @@ import { DatabaseConnectionError } from '@gittix-js/common'
 const PORT = 3000
 
 const start = async () => {
+  console.log('Starting up...')
+  
   // Ensure that the JWT_KEY is present in the environment variable before starting the application
   if (!process.env.JWT_KEY) {
     throw new Error('JWT secret key is not defined')
