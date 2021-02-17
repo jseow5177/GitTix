@@ -11,8 +11,8 @@ function Signout() {
     onSuccess: () => Router.push('/')
   })
 
-  useEffect(() => {
-    doRequest()
+  useEffect(async () => {
+    await doRequest()
   }, [])
 
   return <div>Signing out...</div>
