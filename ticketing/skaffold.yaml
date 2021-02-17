@@ -10,7 +10,7 @@ build: # Describe how images are built
   googleCloudBuild: # To use Google Cloud Build
     projectId: gitix-dev
   artifacts: # The images to be built
-    - image: us.gcr.io/gitix-dev/auth # Image name to be built
+    - image: us.gcr.io/gitix-dev/auth # jseow5177/auth # Image name to be built
       context: auth # The directory containing the artifact's sources
       docker: 
         dockerfile: Dockerfile # The Docker file in the directory
@@ -18,7 +18,7 @@ build: # Describe how images are built
         manual: # Manual sync rules
           - src: 'src/**/*.ts' # Local paths to be matched against
             dest: . # The destination path in the container where the files should be synced to
-    - image: us.gcr.io/gitix-dev/tickets
+    - image: us.gcr.io/gitix-dev/tickets # jseow5177/tickets
       context: tickets
       docker: 
         dockerfile: Dockerfile
@@ -26,7 +26,7 @@ build: # Describe how images are built
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image: us.gcr.io/gitix-dev/orders
+    - image: us.gcr.io/gitix-dev/orders # jseow5177/orders
       context: orders
       docker:
         dockerfile: Dockerfile
@@ -34,7 +34,7 @@ build: # Describe how images are built
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image: us.gcr.io/gitix-dev/expiration
+    - image: us.gcr.io/gitix-dev/expiration # jseow5177/expiration
       context: expiration
       docker:
         dockerfile: Dockerfile
@@ -42,7 +42,7 @@ build: # Describe how images are built
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image: us.gcr.io/gitix-dev/payments
+    - image: us.gcr.io/gitix-dev/payments # jseow5177/payments
       context: payments
       docker:
         dockerfile: Dockerfile
@@ -50,7 +50,7 @@ build: # Describe how images are built
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image: us.gcr.io/gitix-dev/client
+    - image: us.gcr.io/gitix-dev/client # jseow5177/client
       context: client
       docker:
         dockerfile: Dockerfile

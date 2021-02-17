@@ -15,7 +15,7 @@ spec:
     spec:
       containers: # Define the containers within the pod
         - name: payments
-          image: us.gcr.io/gitix-dev/payments # The image to create the container
+          image: us.gcr.io/gitix-dev/payments # jseow5177/payments # The image to create the container
           env: # The environment variables to be accessed in the container
             - name: JWT_KEY
               valueFrom:
@@ -28,9 +28,9 @@ spec:
                   name: stripe-secret
                   key: STRIPE_KEY
             - name: MONGO_URI
-              value: 'mongodb://payments-mongo-srv:27017/payments'
+              value: mongodb://payments-mongo-srv:27017/payments
             - name: NATS_URL
-              value: 'http://nats-srv:4222'
+              value: http://nats-srv:4222
             - name: NATS_CLIENT_ID
               valueFrom:
                 fieldRef:

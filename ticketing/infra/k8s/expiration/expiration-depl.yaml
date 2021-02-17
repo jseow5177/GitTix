@@ -15,10 +15,10 @@ spec:
     spec:
       containers: # Define the containers within the pod
         - name: expiration
-          image: us.gcr.io/gitix-dev/expiration # The image to create the container
+          image: us.gcr.io/gitix-dev/expiration # jseow5177/expiration # The image to create the container
           env: # The environment variables to be accessed in the container
             - name: NATS_URL
-              value: 'http://nats-srv:4222'
+              value: http://nats-srv:4222
             - name: NATS_CLIENT_ID
               valueFrom:
                 fieldRef:
