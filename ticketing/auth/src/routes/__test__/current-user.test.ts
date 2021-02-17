@@ -12,7 +12,7 @@ describe('test currentuser get route', () => {
       .get('/api/users/currentuser')
       .set('Cookie', cookie)
       .send()
-      .expect(200)
+      .expect(400)
 
     expect(res.body.currentUser.email).toEqual('test@test.com')
   })
