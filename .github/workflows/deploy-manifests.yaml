@@ -5,7 +5,8 @@ on:
     branches:
       - master
     paths:
-      - ticketing/infra/**
+      - ticketing/infra/k8s/**
+      - ticketing/infra/k8s-prod/**
       
 jobs:
   build:
@@ -19,4 +20,4 @@ jobs:
       - name: Create a new active context to Kubernetes cluster on Digital Ocean
         run: doctl kubernetes cluster kubeconfig save gittix
       - name: Apply Kubernetes manifests
-        run: kubectl apply -f ticketing/infra/k8s
+        run: kubectl apply -f ticketing/infra/k8s -f ticketing/infra/k8s-prod
