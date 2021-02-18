@@ -24,7 +24,7 @@ function Home({ currentUser, tickets }) {
           <tr>
             <th>Title</th>
             <th>Price</th>
-            <th>View</th>
+            <th>Link</th>
           </tr>
         </thead>
         <tbody>
