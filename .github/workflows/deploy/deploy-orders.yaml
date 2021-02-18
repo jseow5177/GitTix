@@ -1,0 +1,31 @@
+name: deploy-orders
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - ticketing/orders/**
+      
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build orders image
+        run: cd ticketing && cd orders && docker build -t jseow5177/orders .
+      - name: Login to Docker Hub
+        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Push orders image to Docker hub
+        run: docker push jseow5177/orders
+      - name: Set up doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - name: Create a new active context to Kubernetes cluster on Digital Ocean
+        run: doctl kubernetes cluster kubeconfig save gittix
+      - name: Restart orders deployment
+        run: kubectl rollout restart deployment orders-depl

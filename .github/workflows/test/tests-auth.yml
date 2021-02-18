@@ -1,19 +1,20 @@
-name: tests-tickets
+name: tests-auth
 
 # Run this workflow on every pull request
 on:
   pull_request:
     paths:
-      - ticketing/tickets/**
+      - ticketing/auth/**
 
 jobs:
   # Set up the job key
   # The key is displayed as the job name when a job name is not provided
-  build:
+  test:
     # Set the type of virtual machine to run on
     runs-on: ubuntu-latest
     steps:
       # Checks out a copy of your repo on the ubuntu-latest machine
       - uses: actions/checkout@v2
       # Run some commands
-      - run: cd ticketing && cd tickets && npm install && npm run test:ci
+      - run: cd ticketing && cd auth && npm install && npm run test:ci
+  

@@ -1,0 +1,31 @@
+name: deploy-auth
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - ticketing/auth/**
+      
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build auth image
+        run: cd ticketing && cd auth && docker build -t jseow5177/auth .
+      - name: Login to Docker Hub
+        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Push auth image to Docker hub
+        run: docker push jseow5177/auth
+      - name: Set up doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - name: Create a new active context to Kubernetes cluster on Digital Ocean
+        run: doctl kubernetes cluster kubeconfig save gittix
+      - name: Restart auth deployment
+        run: kubectl rollout restart deployment auth-depl
