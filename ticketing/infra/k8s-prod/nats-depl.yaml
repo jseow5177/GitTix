@@ -30,7 +30,7 @@ spec:
           '2',
           '-SD', # enable STAN debugging output
           '-cid', # cluster id
-          'gitix'
+          'gittix'
         ]
 ---
 # NATS Service
