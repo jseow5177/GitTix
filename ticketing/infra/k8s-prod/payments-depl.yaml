@@ -36,7 +36,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name # Use pod name as the NATS client id
             - name: NATS_CLUSTER_ID
-              value: gitix-dev
+              value: gittix
 ---
 # Payments ClusterIP service
 apiVersion: v1
