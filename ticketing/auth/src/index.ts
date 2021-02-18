@@ -6,7 +6,7 @@ import { DatabaseConnectionError } from '@gittix-js/common'
 const PORT = 3000
 
 const start = async () => {
-  console.log('Starting auth service!')  
+  console.log('Starting auth service...')  
 
   // Ensure that the JWT_KEY is present in the environment variable before starting the application
   if (!process.env.JWT_KEY) {
