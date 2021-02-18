@@ -1,0 +1,41 @@
+# Auth deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+spec:
+  replicas: 1 # Number of pods to create
+  selector:
+    matchLabels:
+      app: auth # The pods label to be managed
+  template:
+    metadata:
+      labels:
+        app: auth # Label of pod
+    spec:
+      containers: # Define the containers within the pod
+        - name: auth
+          image: jseow5177/auth # The image to create the container
+          env: # The environment variables to be accessed in the container
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret # The name of the secret object
+                  key: JWT_KEY # The key that we want to access inside the secret object
+            - name: MONGO_URI
+              value: mongodb://auth-mongo-srv:27017/auth
+---
+# Auth ClusterIP service
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: auth
+  ports:
+    - name: auth
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

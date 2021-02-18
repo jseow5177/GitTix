@@ -15,7 +15,7 @@ spec:
     spec:
       containers: # Define the containers within the pod
         - name: auth
-          image: us.gcr.io/gitix-dev/auth # jseow5177/auth # The image to create the container
+          image: us.gcr.io/gitix-dev/auth # The image to create the container
           env: # The environment variables to be accessed in the container
             - name: JWT_KEY
               valueFrom:

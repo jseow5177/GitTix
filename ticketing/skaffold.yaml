@@ -4,6 +4,7 @@ deploy: # Describe how images are deployed
   kubectl: # Uses a client side kubectl apply to deploy manifests
     manifests:
       - ./infra/k8s/* # The Kubernetes yaml or json manifests
+      - ./infra/k8s-dev/*
 build: # Describe how images are built
   # local: 
   #   push: false # Do not push images to Docker hub

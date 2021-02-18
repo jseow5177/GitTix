@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: client
-          image: us.gcr.io/gitix-dev/client # jseow5177/client # The image to create the container
+          image: jseow5177/client # The image to create the container
 ---
 # Client ClusterIP Service
 apiVersion: v1

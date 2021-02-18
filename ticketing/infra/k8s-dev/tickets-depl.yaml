@@ -1,21 +1,21 @@
-# Orders deployment
+# Tickets deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: orders-depl
+  name: tickets-depl
 spec:
   replicas: 1 # Number of pods to create
   selector:
     matchLabels:
-      app: orders # The pods label to be managed
+      app: tickets # The pods label to be managed
   template:
     metadata:
       labels:
-        app: orders # Label of pod
+        app: tickets # Label of pod
     spec:
       containers: # Define the containers within the pod
-        - name: orders
-          image: us.gcr.io/gitix-dev/orders # jseow5177/orders # The image to create the container
+        - name: tickets
+          image: us.gcr.io/gitix-dev/tickets # The image to create the container
           env: # The environment variables to be accessed in the container
             - name: JWT_KEY
               valueFrom:
@@ -23,7 +23,7 @@ spec:
                   name: jwt-secret # The name of the secret object
                   key: JWT_KEY # The key that we want to access inside the secret object
             - name: MONGO_URI
-              value: mongodb://orders-mongo-srv:27017/orders
+              value: mongodb://tickets-mongo-srv:27017/tickets
             - name: NATS_URL
               value: http://nats-srv:4222
             - name: NATS_CLIENT_ID
@@ -33,17 +33,17 @@ spec:
             - name: NATS_CLUSTER_ID
               value: gitix-dev
 ---
-# Orders ClusterIP service
+# Tickets ClusterIP service
 apiVersion: v1
 kind: Service
 metadata:
-  name: orders-srv
+  name: tickets-srv
 spec:
   type: ClusterIP
   selector:
-    app: orders
+    app: tickets
   ports:
-    - name: orders
+    - name: tickets
       protocol: TCP
       port: 3000 # Port of the service
       targetPort: 3000 # Port of application running inside pods

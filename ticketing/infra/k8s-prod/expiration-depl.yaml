@@ -1,0 +1,29 @@
+# Expiration deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: expiration-depl
+spec:
+  replicas: 1 # Number of pods to create
+  selector:
+    matchLabels:
+      app: expiration # The pods label to be managed
+  template:
+    metadata:
+      labels:
+        app: expiration # Label of pod
+    spec:
+      containers: # Define the containers within the pod
+        - name: expiration
+          image: jseow5177/expiration # The image to create the container
+          env: # The environment variables to be accessed in the container
+            - name: NATS_URL
+              value: http://nats-srv:4222
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name # Use pod name as the NATS client id
+            - name: NATS_CLUSTER_ID
+              value: gitix-dev
+            - name: REDIS_HOST
+              value: expiration-redis-srv
