@@ -18,13 +18,13 @@ describe('test ticket model', () => {
     const secondInstance = await Ticket.findById(ticket.id)
 
     // Make two separate changes to the tickets we fetched
-    firstInstance.set({ price: 10 })
-    secondInstance.set({ price: 15 })
+    firstInstance!.set({ price: 10 })
+    secondInstance!.set({ price: 15 })
 
     // save the first fetched ticket
-    await firstInstance.save()
+    await firstInstance!.save()
 
-    expect(async() => await secondInstance.save()).rejects.toThrow()
+    expect(async() => await secondInstance!.save()).rejects.toThrow()
   })
 
   it('increments version number on multiple saves', async () => {
