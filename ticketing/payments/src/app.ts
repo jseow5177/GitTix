@@ -20,8 +20,7 @@ app.use(
   cookieSession({
     // cookie content will not be encrypted
     signed: false,
-    // cookie is only to be sent over HTTPS when not in test environment
-    secure: process.env.NODE_ENV !== 'test'
+    secure: false
   })
 )
 
