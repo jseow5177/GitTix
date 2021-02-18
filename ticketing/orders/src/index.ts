@@ -11,7 +11,7 @@ import { PaymentCreatedListener } from './events/listeners/payment-created-liste
 const PORT = 3000
 
 const start = async () => {
-  console.log('Starting orders service!') 
+  console.log('Starting orders service...') 
 
   /**
    * Ensure that the JWT_KEY is present in the environment variable before starting the application
