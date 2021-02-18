@@ -2,6 +2,8 @@ import { natsWrapper } from './nats-wrapper'
 import { OrderCreatedListener } from './events/listeners/order-created-listener'
 
 const start = async () => {
+  console.log('Starting expiration service!') 
+
   /**
    * Ensure that the JWT_KEY is present in the environment variable before starting the application
   */
